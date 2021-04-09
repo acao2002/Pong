@@ -1,0 +1,8 @@
+{
+  "engine": "cocos2d-html5",
+  "packages": "packages",
+  "version": "2.4.0",
+  "name": "Pong",
+  "id": "9333b2e8-b326-4eed-a759-bb373054f5cc",
+  "isNew": false
+}
