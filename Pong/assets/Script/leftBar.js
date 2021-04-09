@@ -14,40 +14,47 @@ cc.Class({
         moveSpeed: 0,
     },
 
-    onKeyDown (event) {
+    onKeyD (event) {
         // Set a flag when key pressed
         switch(event.keyCode) {
             case cc.macro.KEY.w:
-                this.Up = true;
+                this.direction = 1;
                 break;
             case cc.macro.KEY.s:
-                this.Down = true;
+                this.direction = -1;
+
                 break;
         }
     },
 
-    onKeyUp (event) {
+    onKeyU (event) {
         // Unset a flag when key released
         switch(event.keyCode) {
             case cc.macro.KEY.w:
-                this.Up = false;
+                this.direction = 0;
+
                 break;
             case cc.macro.KEY.s:
-                this.Down = false;
+                this.direction = 0;
+
                 break;
         }
+    },
+
+    onDestroy () {
+        // Cancel keyboard input monitoring
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyD, this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyU, this);
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
-
-        this.Up = false;
-        this.Down = false;
+        this.direction = 0
         this.speed = this.moveSpeed
 
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyD, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyU, this);
     },
 
     start () {
@@ -56,12 +63,7 @@ cc.Class({
 
     update: function (dt) {
 
-        if(this.Up) {
-            this.node.y += this.speed
-        }
-        if(this.Down) {
-            this.node.y -= this.speed
-        }
+        this.node.y += this.direction*this.speed
         if (this.node.y > this.maxHeight){
             this.node.y = this.maxHeight
         }
