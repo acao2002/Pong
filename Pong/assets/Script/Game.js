@@ -20,15 +20,15 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-
-        rightBar: {
-            default: null,
-            type: cc.Node
-        },
         
         ball: {
             default: null,
             type: cc.Prefab
+        },
+
+        scoreDisplay: {
+            default: null,
+            type: cc.Label
         },
     },
 
@@ -36,8 +36,11 @@ cc.Class({
 
     onLoad: function () {
 
+        this.score = 1;
+        this.timer = 0;
         this.spawnball();
     },
+
 
     spawnball: function (){
 
@@ -48,9 +51,33 @@ cc.Class({
         newBall.getComponent('Ball').game = this;
     },
 
+
+
     start () {
 
     },
 
-    // update (dt) {},
+    update: function (dt) {
+
+        this.timer += dt;
+        if (this.timer > 7){
+            this.spawnball();
+            this.timer = 0
+            this.updateScore();
+        }
+
+    },
+
+    gameOver: function () {
+        
+        // reload the "game" scene
+        cc.director.loadScene('game');
+
+    },
+
+    updateScore: function() {
+
+        this.score += 1;
+        this.scoreDisplay.string ="Score: " + this.score.toString();
+    },
 });

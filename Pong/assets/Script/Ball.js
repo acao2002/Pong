@@ -10,6 +10,7 @@ cc.Class({
 
     properties: {
 
+        pickRadius: 0,
         directionx: 0,
         directiony:  0,
         minspeed:  0,
@@ -25,12 +26,25 @@ cc.Class({
         //     get ()
     },
 
+    getHit: function () {
+        // Determine the distance according to the position of the Player node
+        var barx = this.game.leftBar.x;
+
+        var bary = this.game.leftBar.y;
+
+        var halfLength = this.game.leftBar.width/2;
+
+        // Calculate the distance between two nodes according to their positions
+        return (Math.abs(barx - this.node.x) < this.pickRadius && Math.abs(bary - this.node.y)< halfLength)
+    },
+
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
         this.addSpeed = 1;
-        this.speedx = this.directionx* (Math.random() - 0.5)*10
-        this.speedy = this.directiony* (Math.random() - 0.5)*10
+        this.speedx = this.directionx*5
+        this.speedy = this.directiony*(Math.random() - 0.5)*5
     },
 
     start () {
@@ -38,15 +52,21 @@ cc.Class({
     },
 
     update: function(dt) {
-        if (Math.abs(this.node.x) >= 450) {
-            this.directionx = - this.directionx
-            this.addSpeed+=0.16;
+
+        if (this.node.x >= 500 || this.getHit()) {
+            this.directionx = - this.directionx;
+            this.addSpeed+=0.04;;
         }
         if (Math.abs(this.node.y) >=280) {
-            this.addSpeed += 0.16;
-            this.directiony = - this.directiony
+            this.addSpeed += 0.04;
+            this.directiony = - this.directiony;
         }
-        this.node.x += (this.speedx*this.addSpeed)*this.directionx
-        this.node.y += (this.speedy*this.addSpeed)*this.directiony
+        this.node.x += (this.speedx*this.addSpeed)*this.directionx;
+        this.node.y += (this.speedy*this.addSpeed)*this.directiony;
+
+        if (this.node.x <= -450){
+            this.game.gameOver();
+            return;
+        }
     },
 });
