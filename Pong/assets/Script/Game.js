@@ -30,6 +30,21 @@ cc.Class({
             default: null,
             type: cc.Label
         },
+
+        finalD: {
+            default:null, 
+            type: cc.Label
+        },
+
+        zone: {
+            default: null,
+            type: cc.Node
+        },
+
+        button: {
+            default: null,
+            type: cc.Node
+        },
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -39,12 +54,13 @@ cc.Class({
         this.score = 1;
         this.timer = 0;
         this.spawnball();
+        this.button.active = false;
     },
 
 
     spawnball: function (){
 
-    
+        this.spawn = true;
         var newBall = cc.instantiate(this.ball);
         this.node.addChild(newBall);
         newBall.setPosition(0,0);
@@ -61,18 +77,35 @@ cc.Class({
 
         this.timer += dt;
         if (this.timer > 7){
-            this.spawnball();
-            this.timer = 0
-            this.updateScore();
+            if (this.spawn) {
+                this.spawnball();
+                this.timer = 0
+                this.updateScore();
+            }
+        
         }
 
     },
 
-    gameOver: function () {
-        
-        // reload the "game" scene
-        cc.director.loadScene('game');
+    turnOff: function () {
+        this.ball.active = false;
+        this.leftBar.active =false;
+        this.spawn = false;
+        this.finalD.string = "Congrats! Your score is "+ this.score.toString();
+        this.ground.opacity = "50";
+        this.scoreDisplay.string =" ";
+        this.zone.opacity ="0";
+        this.button.active = true;
+    },
 
+    gameOver: function () {
+        // reload the "game" scene
+        this.turnOff();
+    },
+
+    playAgain: function() {
+
+        cc.director.loadScene('game');
     },
 
     updateScore: function() {

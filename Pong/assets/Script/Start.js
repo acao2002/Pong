@@ -17,6 +17,7 @@ cc.Class({
 
     onLoad: function () {
         cc.game.addPersistRootNode(this.node);
+        cc.director.preloadScene('game');
     },
 
     start () {

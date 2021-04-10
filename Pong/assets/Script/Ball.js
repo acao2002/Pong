@@ -65,6 +65,7 @@ cc.Class({
         this.node.y += (this.speedy*this.addSpeed)*this.directiony;
 
         if (this.node.x <= -450){
+            this.node.destroy();
             this.game.gameOver();
             return;
         }
